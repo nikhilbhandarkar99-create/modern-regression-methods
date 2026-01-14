@@ -1,7 +1,7 @@
 # Workplace Absenteeism Analysis - STT 490
 
 ## Project Overview
-This project was conducted for **STT 490(Modern Regression Methods)** (April 2022) to analyze the factors contributing to absenteeism at work. Using a dataset comprised of employee records, the analysis aims to identify the most significant predictors of the number of hours an employee is absent, ranging from medical reasons to disciplinary failures.
+This project was conducted for **STT 490 (Modern Regression Methods)** (April 2022) to analyze the factors contributing to absenteeism at work. Using a dataset comprised of employee records, the analysis aims to identify the most significant predictors of the number of hours an employee is absent, ranging from medical reasons to disciplinary failures.
 
 The study employs **Generalized Linear Models (GLM)** to explore relationships between absenteeism and various categories of predictors, including demographics, lifestyle choices, and work environment.
 
