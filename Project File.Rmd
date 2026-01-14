@@ -1,0 +1,118 @@
+---
+title: "STT 490 Project"
+author: "Nikhil Bhandarkar"
+date: "4/11/2022"
+output: html_document
+---
+
+```{r}
+library(readxl)
+```
+
+```{r}
+data <- read_excel("Absenteeism_at_work.xls")
+hist(data$`Reason for absence`)
+```
+
+```{r}
+data$`Reason for absence` <- as.factor(data$`Reason for absence`)
+data$`Social drinker` <- as.factor(data$`Social drinker`)
+data$`Social smoker`<- as.factor(data$`Social smoker`)
+data$Education <- as.factor(data$Education)
+data$Seasons <- as.factor(data$Seasons)
+data$`Day of the week` <- as.factor(data$`Day of the week`)
+data$`Month of absence`<- as.factor(data$`Month of absence`)
+data$`Disciplinary failure`<- as.factor(data$`Disciplinary failure`)
+data$`Absenteeism time in hours` <- as.integer(data$`Absenteeism time in hours`)
+head(data)
+```
+
+```{r}
+max(data$`Absenteeism time in hours`)
+mean(data$`Absenteeism time in hours`)
+median(data$`Absenteeism time in hours`)
+```
+
+```{r}
+qqnorm(sqrt(data$`Absenteeism time in hours`), main ="Q-Q Plot for Absent Hours")
+qqline(sqrt(data$`Absenteeism time in hours`))
+```
+
+```{r}
+plot(data$`Reason for absence`, data$`Absenteeism time in hours`, xlab = "Reason for Absence", ylab = "Hours Absent")
+plot(data$Age, data$`Absenteeism time in hours`)
+hist(data$Age, breaks = 20)
+hist(data$`Work load Average/day`)
+hist(data$`Absenteeism time in hours`, breaks = 24)
+```
+
+```{r}
+plot(data$Age, data$`Absenteeism time in hours`) + abline(lm(`Absenteeism time in hours` ~ Age, data = data))
+```
+
+```{r}
+hist(as.integer(data$`Reason for absence`), breaks = 28, xlab= "Reason Code")
+```
+
+```{r}
+unique(data$`Disciplinary failure`)
+```
+
+```{r}
+data %>% 
+  group_by(`Reason for absence`) %>% 
+  summarise(no_rows = length(`Reason for absence`))
+```
+
+```{r}
+glm.fit <- glm(sqrt(`Absenteeism time in hours`) ~., family = "gaussian", data = data)
+summary(glm.fit)
+```
+
+```{r}
+plot(glm.fit)
+```
+
+```{r}
+demo.fit <- glm(sqrt(`Absenteeism time in hours`) ~ Age + `Body mass index` + Education, data = data)
+summary(demo.fit)
+```
+
+```{r}
+reason.fit <- glm(sqrt(`Absenteeism time in hours`) ~ `Reason for absence`, data = data)
+summary(reason.fit)
+```
+
+```{r}
+life.fit <- lm(sqrt(`Absenteeism time in hours`) ~ Son + `Social smoker` + `Social drinker` + Pet, data = data)
+summary(life.fit)
+```
+
+```{r}
+work.fit <- glm(sqrt(`Absenteeism time in hours`)~ `Distance from Residence to Work` + `Transportation expense` + `Disciplinary failure` + `Work load Average/day`, data = data)
+summary(work.fit)
+```
+
+```{r}
+temp.fit <- glm(`Absenteeism time in hours`~ `Month of absence` + `Day of the week` + Seasons, data = data)
+summary(temp.fit)
+```
+
+```{r}
+full.fit <- glm(sqrt(`Absenteeism time in hours`) ~ `Reason for absence` + Son + Education + `Reason for absence`:Age + `Reason for absence`:`Body mass index`  + `Reason for absence`:`Social drinker` +`Reason for absence`:`Social smoker` + `Social smoker`:`Social drinker`, data = data)
+summary(full.fit)
+```
+
+```{r}
+plot(full.fit)
+```
+
+```{r}
+gam.fit <- gam(`Absenteeism time in hours` ~ `Reason for absence` + `Reason for absence`:Age + `Reason for absence`:`Body mass index`  + `Reason for absence`:`Social drinker` , data = data)
+gam.fit
+summary(gam.fit)
+```
+
+```{r}
+coef(full.fit)
+```
